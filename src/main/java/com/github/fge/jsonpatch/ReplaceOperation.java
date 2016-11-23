@@ -47,7 +47,7 @@ public final class ReplaceOperation
     }
 
     @Override
-    public JsonNode apply(final JsonNode node)
+    protected JsonNode applyMutating(final JsonNode node)
         throws JsonPatchException
     {
         /*
@@ -69,13 +69,12 @@ public final class ReplaceOperation
         final JsonNode replacement = value.deepCopy();
         if (path.isEmpty())
             return replacement;
-        final JsonNode ret = node.deepCopy();
-        final JsonNode parent = path.parent().get(ret);
+        final JsonNode parent = path.parent().get(node);
         final String rawToken = Iterables.getLast(path).getToken().getRaw();
         if (parent.isObject())
             ((ObjectNode) parent).put(rawToken, replacement);
         else
             ((ArrayNode) parent).set(Integer.parseInt(rawToken), replacement);
-        return ret;
+        return node;
     }
 }

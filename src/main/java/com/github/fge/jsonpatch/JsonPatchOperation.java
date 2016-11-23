@@ -91,7 +91,11 @@ public abstract class JsonPatchOperation
      * @return the patched value
      * @throws JsonPatchException operation failed to apply to this value
      */
-    public abstract JsonNode apply(final JsonNode node)
+    public JsonNode apply(final JsonNode node) throws JsonPatchException {
+        return applyMutating(node.deepCopy());
+    }
+
+    protected abstract JsonNode applyMutating(final JsonNode node)
         throws JsonPatchException;
 
     @Override

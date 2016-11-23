@@ -86,7 +86,7 @@ public final class JsonPatchTest
         final JsonNode node1 = FACTORY.textNode("hello");
         final JsonNode node2 = FACTORY.textNode("world");
 
-        when(op1.apply(node1)).thenReturn(node2);
+        when(op1.applyMutating(node1)).thenReturn(node2);
 
         final JsonPatch patch = new JsonPatch(ImmutableList.of(op1, op2));
 
@@ -94,8 +94,8 @@ public final class JsonPatchTest
             = ArgumentCaptor.forClass(JsonNode.class);
 
         patch.apply(node1);
-        verify(op1, only()).apply(same(node1));
-        verify(op2, only()).apply(captor.capture());
+        verify(op1, only()).applyMutating(same(node1));
+        verify(op2, only()).applyMutating(captor.capture());
 
         assertSame(captor.getValue(), node2);
     }
@@ -105,7 +105,7 @@ public final class JsonPatchTest
         throws JsonPatchException
     {
         final String message = "foo";
-        when(op1.apply(any(JsonNode.class)))
+        when(op1.applyMutating(any(JsonNode.class)))
             .thenThrow(new JsonPatchException(message));
 
         final JsonPatch patch = new JsonPatch(ImmutableList.of(op1, op2));

@@ -53,7 +53,7 @@ public final class TestOperation
     }
 
     @Override
-    public JsonNode apply(final JsonNode node)
+    protected JsonNode applyMutating(final JsonNode node)
         throws JsonPatchException
     {
         final JsonNode tested = path.path(node);
@@ -63,6 +63,6 @@ public final class TestOperation
         if (!EQUIVALENCE.equivalent(tested, value))
             throw new JsonPatchException(BUNDLE.getMessage(
                 "jsonPatch.valueTestFailure"));
-        return node.deepCopy();
+        return node;
     }
 }
