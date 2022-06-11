@@ -27,7 +27,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.fge.jackson.jsonpointer.JsonPointer;
 import com.github.fge.jackson.jsonpointer.ReferenceToken;
 import com.github.fge.jackson.jsonpointer.TokenResolver;
-import com.google.common.collect.Iterables;
+
+import java.util.NoSuchElementException;
 
 
 /**
@@ -130,9 +131,10 @@ public final class AddOperation
 
     private JsonNode addToObject(final JsonPointer path, final JsonNode node)
     {
+        final TokenResolver<JsonNode> token = Iterables.getLast(path);
         final JsonNode ret = node;
         final ObjectNode target = (ObjectNode) path.parent().get(ret);
-        target.put(Iterables.getLast(path).getToken().getRaw(), value);
+        target.set(token.getToken().getRaw(), value);
         return ret;
     }
 }
